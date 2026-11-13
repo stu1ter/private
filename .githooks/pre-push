@@ -1,0 +1,16 @@
+#!/bin/sh
+
+protected_branches="refs/heads/main refs/heads/dev"
+
+while read local_ref local_sha remote_ref remote_sha
+do
+    for branch in $protected_branches
+    do
+        if [ "$remote_ref" = "$branch" ]; then
+            echo "ОШИБКА: Прямой push в ветку $remote_ref запрещен. Создайте новую ветку и откройте Pull Request."
+            exit 1
+        fi
+    done
+done
+
+exit 0
